@@ -1,42 +1,89 @@
-# Pneumonia Detection from Chest X-Ray Images
 
-A deep learning project to classify chest X-ray images for the detection of pneumonia. This project demonstrates an end-to-end computer vision workflow, from data preprocessing and augmentation to training a Convolutional Neural Network (CNN) and deploying it in an interactive web application.
+# 🫁 Pneumonia Detection from Chest X-Rays
 
-This project connects my skills in data science with my academic background in Biological Sciences and Bioengineering.
+## 📌 Project Overview
 
-## Key Features
+This project is a Deep Learning application designed to classify Chest X-Ray images as either **Normal** or  **Pneumonia** . It utilizes **Transfer Learning** with a fine-tuned **ResNet50** architecture to achieve high sensitivity (Recall), ensuring minimal false negatives in medical screening. The model is deployed as an interactive web application using  **Streamlit** .
 
-- **CNN Model**: Developed and trained a custom CNN architecture in TensorFlow/Keras to learn features from X-ray images.
-- **Transfer Learning**: Fine-tuned a pre-trained ResNet50 model, leveraging its powerful learned features to achieve a test accuracy of 94%.
-- **Data Augmentation**: Implemented image augmentation techniques (rotation, shearing, zooming) to prevent overfitting and improve model robustness.
-- **Rigorous Evaluation**: Assessed model performance using a confusion matrix, precision, recall, and F1-score to handle class imbalance.
-- **Interactive Web App**: Deployed the final model in a Streamlit application that allows users to upload an X-ray image and receive an instant classification.
+## 🚀 Key Features
 
-## Tech Stack
+* **Deep Learning Model:** Fine-tuned ResNet50 (pre-trained on ImageNet) for binary classification.
+* **Data Augmentation:** Implemented random rotation, zooming, and shearing to improve model generalization and prevent overfitting.
+* **High Sensitivity:** Optimized for medical context, achieving a **Recall of 97%** for Pneumonia cases.
+* **Interactive UI:** User-friendly web interface built with Streamlit for real-time image analysis.
 
-- **Language**: Python 3
-- **Deep Learning**: TensorFlow, Keras
-- **Data Science**: Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn
-- **Deployment**: Streamlit
+## 🛠️ Tech Stack
 
-## Project Workflow
+* **Language:** Python
+* **Frameworks:** TensorFlow, Keras
+* **Web Deployment:** Streamlit
+* **Data Processing:** NumPy, Pandas
+* **Visualization:** Matplotlib, Seaborn
 
-1. **Data Preprocessing**: The dataset of chest X-ray images is loaded, resized to a uniform dimension, and normalized.
-2. **Data Augmentation**: Keras's `ImageDataGenerator` is used on the training set to create modified versions of images on-the-fly, artificially expanding the dataset.
-3. **Model Building**: Two approaches are benchmarked:
-   - A custom CNN model built from scratch.
-   - A pre-trained ResNet50 model with its final layers replaced and fine-tuned on the X-ray dataset (Transfer Learning).
-4. **Training**: The models are trained to distinguish between 'NORMAL' and 'PNEUMONIA' classes.
-5. **Evaluation**: The trained models are evaluated on a hold-out test set to measure their real-world performance using classification metrics.
-6. **Deployment**: The best-performing model is saved and integrated into a Streamlit application for easy-to-use inference.
+## 📂 Dataset
 
-## Setup and Installation (Placeholder)
+The model was trained on the [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia "null") dataset.
 
-1. Clone the repository: `git clone <your-repo-link>`
-2. Navigate to the directory: `cd pneumonia-detection`
-3. Install dependencies: `pip install -r requirements.txt`
+* **Classes:** Normal vs. Pneumonia
+* **Training Images:** 5,216
+* **Test Images:** 624
 
-## Usage (Placeholder)
+## ⚙️ Installation & Usage
 
-1. Run the model training script: `python scripts/train.py`
-2. Launch the interactive Streamlit app: `streamlit run app/app.py`
+### 1. Clone the Repository
+
+```
+git clone https://github.com/keshavk215/Pneumonia-Detection-from-Chest-X-Ray-Images.git
+cd Pneumonia-Detection-from-Chest-X-Ray-Images
+
+```
+
+### 2. Install Dependencies
+
+```
+pip install -r requirements.txt
+
+```
+
+### 3. Run the Web App
+
+```
+streamlit run app.py
+
+```
+
+The application will open in your browser at `http://localhost:8501`.
+
+## 🧠 Methodology
+
+### 1. Data Preprocessing
+
+* Images resized to `224x224` pixels to match ResNet50 input requirements.
+* **Augmentation:** Applied only to training data to simulate variations in X-ray positioning.
+* **Preprocessing:** Used ResNet's specific preprocessing function (mean subtraction/scaling) rather than simple 0-1 normalization.
+
+### 2. Model Architecture (Transfer Learning)
+
+Instead of training from scratch, I leveraged  **ResNet50** :
+
+* **Base Model:** Frozen ResNet50 weights (ImageNet).
+* **Fine-Tuning:** Unfroze the last 10 layers of the base model to adapt high-level feature extraction specifically for X-ray textures.
+* **Custom Head:** Added GlobalAveragePooling, Dense layers, and Dropout (0.5) to prevent overfitting.
+* **Optimizer:** Adam with a low learning rate (`1e-5`) during fine-tuning to preserve pre-trained knowledge.
+
+## 📊 Results & Evaluation
+
+The model was evaluated on the unseen Test set (624 images).
+
+| **Metric**             | **Score** | **Note**                                          |
+| ---------------------------- | --------------- | ------------------------------------------------------- |
+| **Accuracy**           | **89%**   | Overall correctness                                     |
+| **Recall (Pneumonia)** | **97%**   | Critical for medical screening (minimizes missed cases) |
+| **Precision**          | **87%**   | Acceptable trade-off for higher recall                  |
+
+### Confusion Matrix
+
+* **True Positives:** 378 (Correctly identified Pneumonia)
+* **False Negatives:** 12 (Missed Pneumonia cases)
+* **False Positives:** 55 (Normal flagged as Pneumonia)
+* **True Negatives:** 179 (Correctly identified Normal)
